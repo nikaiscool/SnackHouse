@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin | SnackHouse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050507;
+            --card-bg: #111116;
+            --primary-color: #7c3aed;
+            --primary-hover: #6d28d9;
+            --accent-color: #f59e0b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #27272a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+        p { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
+
+        .auth-box {
+            background: #1a1a24;
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .code-display {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--accent-color);
+            letter-spacing: 4px;
+            background: #050507;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px dashed var(--accent-color);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background-color: #050507;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        input:focus { outline: none; border-color: var(--primary-color); }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        .btn:hover { background-color: var(--primary-hover); }
+
+        .pedido-card {
+            background: #1a1a24;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        .cliente-name { font-weight: 700; font-size: 16px; color: white; }
+        .pedido-time { font-size: 12px; color: var(--text-muted); }
+        .pedido-items { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+        .pedido-total { font-weight: 700; color: var(--accent-color); font-size: 15px; }
+
+        .btn-clear {
+            background: #ef4444;
+            margin-top: 20px;
+        }
+        .btn-clear:hover { background: #dc2626; }
+        
+        .back-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 13px; }
+        .back-link:hover { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <h1>Panel de Administración | SnackHouse 🔒</h1>
+        <p>Área restringida exclusiva para el propietario del sitio.</p>
+
+        <!-- Bloque de Seguridad / Verificación -->
+        <div id="auth-section" class="auth-box">
+            <p style="margin-bottom: 5px;">Código de seguridad temporal generado para esta sesión:</p>
+            <div class="code-display" id="codigo-generado">----</div>
+            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">*Este código cambia cada vez que abres o recargas la página.</p>
+            
+            <input type="text" id="input-codigo" placeholder="Ingresa el código aquí">
+            <button class="btn" onclick="verificarCodigo()">Desbloquear Panel 🔓</button>
+        </div>
+
+        <!-- Bloque del Panel de Pedidos (Oculto inicialmente) -->
+        <div id="admin-panel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="font-size: 18px;">Pedidos Recibidos 📋</h2>
+                <span id="contador-pedidos" style="background: var(--primary-color); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">0 pedidos</span>
+            </div>
+
+            <div id="lista-pedidos"></div>
+
+            <button class="btn btn-clear" onclick="limpiarPedidos()">Limpiar / Borrar Todos los Pedidos</button>
+        </div>
+
+        <br>
+        <a href="index.html" class="back-link">&larr; Volver a la Tienda</a>
+    </div>
+
+    <script>
+        // Generar código aleatorio de 4 dígitos exclusivo para esta sesión/pestaña
+        const codigoSecreto = Math.floor(1000 + Math.random() * 9000).toString();
+        document.getElementById('codigo-generado').innerText = codigoSecreto;
+
+        function verificarCodigo() {
+            let ingreso = document.getElementById('input-codigo').value.trim();
+            if (ingreso === codigoSecreto) {
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                cargarPedidos();
+            } else {
+                alert("Código incorrecto. Inténtalo de nuevo.");
+                document.getElementById('input-codigo').value = "";
+                document.getElementById('input-codigo').focus();
+            }
+        }
+
+        function cargarPedidos() {
+            let pedidos = JSON.parse(localStorage.getItem('snackhouse_pedidos_admin')) || [];
+            let contenedor = document.getElementById('lista-pedidos');
+            contenedor.innerHTML = "";
+
+            document.getElementById('contador-pedidos').innerText = `${pedidos.length} pedidos`;
+
+            if (pedidos.length === 0) {
+                contenedor.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--text-muted);">No hay pedidos registrados todavía.</p>`;
+                return;
+            }
+
+            pedidos.reverse().forEach(p => {
+                let itemsStr = p.productos.map(i => `• ${i.cantidad}x ${i.name}`).join("<br>");
+                let div = document.createElement('div');
+                div.className = 'pedido-card';
+                div.innerHTML = `
+                    <div class="pedido-header">
+                        <span class="cliente-name">👤 ${p.cliente}</span>
+                        <span class="pedido-time">🕒 ${p.fecha}</span>
+                    </div>
+                    <div class="pedido-items">${itemsStr}</div>
+                    <div class="pedido-total">Total a cobrar: $${p.total}.00 MXN</div>
+                `;
+                contenedor.appendChild(div);
+            });
+        }
+
+        function limpiarPedidos() {
+            if (confirm("¿Estás seguro de borrar todos los pedidos registrados?")) {
+                localStorage.removeItem('snackhouse_pedidos_admin');
+                cargarPedidos();
+            }
+        }
+    </script>
+</body>
+</html>
