@@ -41,6 +41,7 @@
             border-radius: 14px;
             padding: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
         }
 
         h1 { font-size: 22px; font-weight: 700; margin-bottom: 20px; }
@@ -55,6 +56,7 @@
             border-radius: 8px;
             color: white;
             font-size: 14px;
+            transition: border-color 0.2s;
         }
         input:focus { outline: none; border-color: var(--primary-color); }
 
@@ -82,6 +84,7 @@
             font-size: 13.5px;
             color: #fef3c7;
             margin-bottom: 25px;
+            transition: all 0.3s ease;
         }
         .instructions-box b { color: var(--accent-color); }
 
@@ -97,11 +100,12 @@
             font-weight: 600;
             font-size: 15px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
         .btn-enviar:hover { background-color: #047857; }
+        .btn-enviar:active { transform: scale(0.98); }
 
-        .back-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 13px; }
+        .back-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
         .back-link:hover { color: white; }
     </style>
 </head>
@@ -160,22 +164,21 @@
                 return;
             }
 
-            // Calcular total y estructurar el pedido
             let total = carrito.reduce((sum, item) => sum + (item.price * item.cantidad), 0);
             let nuevoPedido = {
                 id: Date.now(),
                 cliente: nombre,
                 productos: carrito,
                 total: total,
+                estado: 'pendiente', // pendiente, aceptado, rechazado
                 fecha: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
-            // Guardar en la lista general de pedidos de admin
             let listaPedidos = JSON.parse(localStorage.getItem('snackhouse_pedidos_admin')) || [];
             listaPedidos.push(nuevoPedido);
             localStorage.setItem('snackhouse_pedidos_admin', JSON.stringify(listaPedidos));
 
-            // Limpiar carrito del usuario
+            // Limpiar carrito
             localStorage.removeItem('snackhouse_carrito');
 
             alert("¡Pedido enviado con éxito! Recoge tus snacks en la zona indicada llevando tu dinero.");
