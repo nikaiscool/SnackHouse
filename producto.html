@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Producto | SnackHouse</title>
+    <title>Detalle del Producto | SnackHouse</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -24,13 +24,13 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            animation: fadeIn 0.3s ease-out;
             padding: 40px 20px;
+            animation: fadeIn 0.3s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .container {
@@ -43,107 +43,104 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
 
-        .back-link {
-            display: inline-block;
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 13px;
-            margin-bottom: 24px;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: var(--text-color); }
-
-        .product-display {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .product-emoji {
-            font-size: 64px;
-            background: #1c1c24;
-            width: 100px;
-            height: 100px;
-            border-radius: 20px;
+        .product-img-large {
+            width: 100%;
+            height: 200px;
+            background-color: #1c1c24;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px auto;
+            font-size: 64px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
         }
 
-        h1 { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
-        .price { font-size: 22px; font-weight: 700; color: var(--accent-color); margin-bottom: 16px; }
-        .desc { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+        h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: white; }
+        .product-price { font-size: 20px; font-weight: 700; color: var(--accent-color); margin-bottom: 16px; }
+        .product-desc { color: var(--text-muted); font-size: 14px; margin-bottom: 24px; }
 
-        .btn-action {
+        .btn-add {
+            display: block;
+            width: 100%;
             background-color: var(--primary-color);
             color: white;
-            border: none;
+            text-align: center;
             padding: 14px;
             border-radius: 8px;
+            border: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
-            width: 100%;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
-        .btn-action:hover { background-color: var(--primary-hover); }
+        .btn-add:hover { background-color: var(--primary-hover); }
+        .btn-add:active { transform: scale(0.98); }
+
+        .back-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+        .back-link:hover { color: white; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="index.html" class="back-link">&larr; Volver al Catálogo</a>
-        
-        <div class="product-display">
-            <div class="product-emoji" id="p-emoji">🍬</div>
-            <h1 id="p-name">Cargando producto...</h1>
-            <div class="price" id="p-price">$0.00 MXN</div>
-            <p class="desc" id="p-desc">Cargando descripción detallada...</p>
-        </div>
-
-        <button class="btn-action" id="btn-comprar">Agregar al Carrito 🛒</button>
+    <div class="container" id="product-container">
+        <!-- Se llena dinámicamente -->
     </div>
 
     <script>
+        // Mismo catálogo sincronizado
         const productos = [
-            { id: 1, name: "Paleta Takis / Skwinkles", price: 12, emoji: "🍭", desc: "La clásica paleta con su respectivo polvo acidito para sobrevivir las matemáticas." },
-            { id: 2, name: "Lucas Muecas", price: 15, emoji: "🌶️", desc: "Caramelo macizo con polvo picante sabor chamoy. Un clásico inquebrantable." },
-            { id: 3, name: "Duvalín", price: 8, emoji: "🍫", desc: "Avellana y fresa con vainilla para embarrar con la cucharita o el dedo." },
-            { id: 4, name: "Bubulubu", price: 10, emoji: "🍓", desc: "Malvavisco cubierto de chocolate y mermelada de fresa. Delicia de recreo." },
-            { id: 5, name: "Pica Fresas (Bolsita x5)", price: 7, emoji: "🍓", desc: "Gomitas sabor fresa con chilito en polvo. Baratas y adictivas." },
-            { id: 6, name: "Borrachitos Artesanales", price: 10, emoji: "🍬", desc: "Dulces típicos suaves espolvoreados con azúcar. Sabor a fiesta patronal." },
-            { id: 7, name: "Chicles Canels (Paquete)", price: 6, emoji: "🟢", desc: "El chicle que pierde el sabor en 45 segundos pero rifa para el aliento." },
-            { id: 8, name: "Papas Fritos (Barcel/Sabritas)", price: 18, emoji: "🥔", desc: "Las crujientes obligatorias para el bajón de la tercera hora." },
-            { id: 9, name: "Jugo Del Valle / Boing", price: 14, emoji: "🧃", desc: "De mango o guayaba para acompañar cualquier antojo salado." },
-            { id: 10, name: "Paleta Dr. Blowpop", price: 9, emoji: "🍭", desc: "Caramelo con chicle interior para exprimirle las últimas fuerzas al día." }
+            { id: 1, name: "Doritos", price: 20, emoji: "🔺", desc: "Los clásicos totopos crujientes con su toque de queso y chile." },
+            { id: 2, name: "Takis Fuego", price: 22, emoji: "🔥", desc: "Rollo de maíz crujiente con intenso sabor a chile y limón." },
+            { id: 3, name: "Pulparindo", price: 8, emoji: "🍬", desc: "Dulce de pulpa de tamarindo natural con sal y chile." },
+            { id: 4, name: "Gomitas de Sandía", price: 12, emoji: "🍉", desc: "Gomitas azucaradas con forma y sabor a sandía acidita." },
+            { id: 5, name: "Chicles Trident (Menta)", price: 15, emoji: "🍃", desc: "Chicles sin azúcar sabor menta refrescante para el aliento." },
+            { id: 6, name: "Cacahuate Japonés", price: 14, emoji: "🥜", desc: "Cacahuates crujientes con capa dorada de harina y soya." },
+            { id: 7, name: "Cacahuates Picantes", price: 14, emoji: "🌶️", desc: "Cacahuates tostados con una capa crujiente y picante." },
+            { id: 8, name: "Cacahuates Salados", price: 14, emoji: "🧂", desc: "Cacahuates clásicos tostados y con su punto exacto de sal." },
+            { id: 9, name: "Takis Azules", price: 22, emoji: "🌀", desc: "La versión extrema de Takis con un toque picante y llamativo color." },
+            { id: 10, name: "Chips Fuego", price: 20, emoji: "🥔", desc: "Papas crujientes artesanales con chile y limón bien potente." }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
-        const productId = parseInt(urlParams.get('id')) || 1;
-        const producto = productos.find(p => p.id === productId) || productos[0];
+        const productId = parseInt(urlParams.get('id'));
 
-        document.getElementById('p-emoji').innerText = producto.emoji;
-        document.getElementById('p-name').innerText = producto.name;
-        document.getElementById('p-price').innerText = `$${producto.price}.00 MXN`;
-        document.getElementById('p-desc').innerText = producto.desc;
+        let producto = productos.find(p => p.id === productId);
+        let container = document.getElementById('product-container');
 
-        document.getElementById('btn-comprar').onclick = function() {
+        if (producto) {
+            container.innerHTML = `
+                <div class="product-img-large">${producto.emoji}</div>
+                <h1>${producto.name}</h1>
+                <div class="product-price">$${producto.price}.00 MXN</div>
+                <div class="product-desc">${producto.desc}</div>
+                <button class="btn-add" onclick="agregarAlCarrito(${producto.id})">Agregar al Carrito 🛒</button>
+                <br>
+                <a href="index.html" class="back-link">&larr; Volver al Catálogo</a>
+            `;
+        } else {
+            container.innerHTML = `
+                <h1>Producto no encontrado</h1>
+                <p class="product-desc">Lo sentimos, el producto que buscas no existe o fue removido.</p>
+                <a href="index.html" class="back-link">&larr; Volver al Catálogo</a>
+            `;
+        }
+
+        function agregarAlCarrito(id) {
+            let productoSeleccionado = productos.find(p => p.id === id);
             let carrito = JSON.parse(localStorage.getItem('snackhouse_carrito')) || [];
-            let index = carrito.findIndex(p => p.id === producto.id);
+
+            let index = carrito.findIndex(p => p.id === id);
             if (index > -1) {
                 carrito[index].cantidad += 1;
             } else {
-                carrito.push({ ...producto, cantidad: 1 });
+                carrito.push({ ...productoSeleccionado, cantidad: 1 });
             }
+
             localStorage.setItem('snackhouse_carrito', JSON.stringify(carrito));
-            
-            let btn = document.getElementById('btn-comprar');
-            btn.innerText = "¡Agregado al Carrito con Éxito! ✔";
-            btn.style.backgroundColor = "#059669";
-            setTimeout(() => {
-                window.location.href = "carrito.html";
-            }, 600);
-        };
+            alert(`¡Agregado al carrito: ${productoSeleccionado.name}!`);
+            window.location.href = "index.html";
+        }
     </script>
 </body>
 </html>
