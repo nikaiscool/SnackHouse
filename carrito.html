@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Carrito | SnackHouse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050507;
+            --card-bg: #111116;
+            --primary-color: #7c3aed;
+            --primary-hover: #6d28d9;
+            --accent-color: #f59e0b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #27272a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            animation: fadeIn 0.3s ease-out;
+            padding: 40px 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+        .item-info { display: flex; align-items: center; gap: 12px; }
+        .item-emoji { font-size: 24px; }
+        .item-name { font-weight: 600; }
+        .item-price { color: var(--text-muted); font-size: 12px; }
+
+        .item-actions { display: flex; align-items: center; gap: 15px; }
+        .btn-qty {
+            background: #27272a;
+            color: white;
+            border: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-qty:hover { background: #3f3f46; }
+
+        .total-section {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .total-price { color: var(--accent-color); }
+
+        .btn-checkout {
+            display: block;
+            margin-top: 30px;
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        .btn-checkout:hover { background-color: var(--primary-hover); }
+
+        .empty-cart { text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 14px; }
+        .back-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 13px; }
+        .back-link:hover { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Tu Carrito en SnackHouse 🛒</h1>
+        
+        <div id="cart-list"></div>
+
+        <div id="checkout-area" style="display: none;">
+            <div class="total-section">
+                <span>Total a Pagar:</span>
+                <span class="total-price" id="cart-total">$0.00 MXN</span>
+            </div>
+            <a href="checkout.html" class="btn-checkout">Proceder al Pedido &rarr;</a>
+        </div>
+
+        <a href="index.html" class="back-link">&larr; Seguir comprando dulces</a>
+    </div>
+
+    <script>
+        function renderCart() {
+            let carrito = JSON.parse(localStorage.getItem('snackhouse_carrito')) || [];
+            let cartList = document.getElementById('cart-list');
+            let checkoutArea = document.getElementById('checkout-area');
+            
+            cartList.innerHTML = "";
+
+            if (carrito.length === 0) {
+                cartList.innerHTML = `<div class="empty-cart">Tu carrito está vacío. ¡Agrega unos dulces!</div>`;
+                checkoutArea.style.display = "none";
+                return;
+            }
+
+            checkoutArea.style.display = "block";
+            let total = 0;
+
+            carrito.forEach((item, index) => {
+                total += item.price * item.cantidad;
+                let div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-emoji">${item.emoji}</span>
+                        <div>
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-price">$${item.price} x ${item.cantidad}</div>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="btn-qty" onclick="cambiarCantidad(${index}, 1)">+</button>
+                        <span>${item.cantidad}</span>
+                        <button class="btn-qty" onclick="cambiarCantidad(${index}, -1)">-</button>
+                    </div>
+                `;
+                cartList.appendChild(div);
+            });
+
+            document.getElementById('cart-total').innerText = `$${total}.00 MXN`;
+        }
+
+        function cambiarCantidad(index, delta) {
+            let carrito = JSON.parse(localStorage.getItem('snackhouse_carrito')) || [];
+            carrito[index].cantidad += delta;
+            if (carrito[index].cantidad <= 0) {
+                carrito.splice(index, 1);
+            }
+            localStorage.setItem('snackhouse_carrito', JSON.stringify(carrito));
+            renderCart();
+        }
+
+        renderCart();
+    </script>
+</body>
+</html>
