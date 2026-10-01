@@ -12,12 +12,16 @@
             --primary-color: #7c3aed;
             --primary-hover: #6d28d9;
             --accent-color: #f59e0b;
+            --success-color: #059669;
+            --success-hover: #047857;
+            --danger-color: #dc2626;
+            --danger-hover: #b91c1c;
             --text-color: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #27272a;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s ease, transform 0.2s ease, opacity 0.3s ease; }
         
         body {
             font-family: 'Inter', sans-serif;
@@ -28,36 +32,24 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto;
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 14px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        h1 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+        h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
         p { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
 
         .auth-box {
             background: #1a1a24;
             border: 1px solid var(--border-color);
-            padding: 24px;
+            padding: 30px;
             border-radius: 10px;
             text-align: center;
-        }
-
-        .code-display {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--accent-color);
-            letter-spacing: 4px;
-            background: #050507;
-            padding: 12px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border: 1px dashed var(--accent-color);
         }
 
         input {
@@ -67,9 +59,8 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: white;
-            font-size: 16px;
+            font-size: 15px;
             text-align: center;
-            letter-spacing: 2px;
             margin-bottom: 15px;
         }
         input:focus { outline: none; border-color: var(--primary-color); }
@@ -84,17 +75,51 @@
             font-size: 14px;
             cursor: pointer;
             width: 100%;
-            transition: background 0.2s;
         }
-        .btn:hover { background-color: var(--primary-hover); }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
 
+        /* Pestañas de navegación del Admin */
+        .admin-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: #1a1a24;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .tab-btn:hover { color: white; border-color: var(--text-muted); }
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Tarjetas de pedidos */
         .pedido-card {
             background: #1a1a24;
             border: 1px solid var(--border-color);
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 15px;
+            animation: fadeIn 0.3s ease-out;
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .pedido-header {
             display: flex;
             justify-content: space-between;
@@ -105,45 +130,77 @@
         }
         .cliente-name { font-weight: 700; font-size: 16px; color: white; }
         .pedido-time { font-size: 12px; color: var(--text-muted); }
-        .pedido-items { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
-        .pedido-total { font-weight: 700; color: var(--accent-color); font-size: 15px; }
+        .pedido-items { font-size: 14px; color: var(--text-muted); margin-bottom: 12px; }
+        .pedido-total { font-weight: 700; color: var(--accent-color); font-size: 15px; margin-bottom: 15px; }
 
-        .btn-clear {
-            background: #ef4444;
-            margin-top: 20px;
+        .action-buttons {
+            display: flex;
+            gap: 10px;
         }
-        .btn-clear:hover { background: #dc2626; }
-        
-        .back-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; font-size: 13px; }
+        .btn-aceptar {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+        .btn-aceptar:hover { background-color: var(--success-hover); }
+
+        .btn-rechazar {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+        }
+        .btn-rechazar:hover { background-color: var(--danger-hover); }
+
+        .badge-status {
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .badge-aceptado { background: rgba(5, 150, 105, 0.2); color: #34d399; border: 1px solid #059669; }
+        .badge-rechazado { background: rgba(220, 38, 38, 0.2); color: #f87171; border: 1px solid #dc2626; }
+
+        .back-link { display: inline-block; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 13px; }
         .back-link:hover { color: white; }
     </style>
 </head>
 <body>
 
-    <div class="container" id="app">
+    <div class="container">
         <h1>Panel de Administración | SnackHouse 🔒</h1>
-        <p>Área restringida exclusiva para el propietario del sitio.</p>
+        <p>Área restringida exclusiva para el propietario.</p>
 
-        <!-- Bloque de Seguridad / Verificación -->
+        <!-- Bloque de Contraseña -->
         <div id="auth-section" class="auth-box">
-            <p style="margin-bottom: 5px;">Código de seguridad temporal generado para esta sesión:</p>
-            <div class="code-display" id="codigo-generado">----</div>
-            <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 15px;">*Este código cambia cada vez que abres o recargas la página.</p>
-            
-            <input type="text" id="input-codigo" placeholder="Ingresa el código aquí">
-            <button class="btn" onclick="verificarCodigo()">Desbloquear Panel 🔓</button>
+            <p style="margin-bottom: 15px;">Ingresa tu contraseña de administrador:</p>
+            <input type="password" id="input-password" placeholder="Contraseña secreta">
+            <button class="btn" onclick="verificarPassword()">Ingresar al Panel 🔓</button>
         </div>
 
-        <!-- Bloque del Panel de Pedidos (Oculto inicialmente) -->
+        <!-- Bloque del Panel (Oculto inicialmente) -->
         <div id="admin-panel" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="font-size: 18px;">Pedidos Recibidos 📋</h2>
-                <span id="contador-pedidos" style="background: var(--primary-color); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">0 pedidos</span>
+            
+            <!-- Pestañas de Filtro -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="cambiarTab('pendientes', this)">📦 Nuevos Pedidos</button>
+                <button class="tab-btn" onclick="cambiarTab('aceptados', this)">✅ Pedidos Aceptados</button>
+                <button class="tab-btn" onclick="cambiarTab('rechazados', this)">❌ Pedidos Rechazados</button>
             </div>
 
             <div id="lista-pedidos"></div>
-
-            <button class="btn btn-clear" onclick="limpiarPedidos()">Limpiar / Borrar Todos los Pedidos</button>
         </div>
 
         <br>
@@ -151,21 +208,28 @@
     </div>
 
     <script>
-        // Generar código aleatorio de 4 dígitos exclusivo para esta sesión/pestaña
-        const codigoSecreto = Math.floor(1000 + Math.random() * 9000).toString();
-        document.getElementById('codigo-generado').innerText = codigoSecreto;
+        // CONTRASEÑA FIJA (Puedes cambiarla aquí mismo si quieres)
+        const PASSWORD_SECRETA = "snackhouse2026";
+        let tabActual = 'pendientes';
 
-        function verificarCodigo() {
-            let ingreso = document.getElementById('input-codigo').value.trim();
-            if (ingreso === codigoSecreto) {
+        function verificarPassword() {
+            let pass = document.getElementById('input-password').value.trim();
+            if (pass === PASSWORD_SECRETA) {
                 document.getElementById('auth-section').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 cargarPedidos();
             } else {
-                alert("Código incorrecto. Inténtalo de nuevo.");
-                document.getElementById('input-codigo').value = "";
-                document.getElementById('input-codigo').focus();
+                alert("Contraseña incorrecta.");
+                document.getElementById('input-password').value = "";
+                document.getElementById('input-password').focus();
             }
+        }
+
+        function cambiarTab(tab, elemento) {
+            tabActual = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            elemento.classList.add('active');
+            cargarPedidos();
         }
 
         function cargarPedidos() {
@@ -173,34 +237,59 @@
             let contenedor = document.getElementById('lista-pedidos');
             contenedor.innerHTML = "";
 
-            document.getElementById('contador-pedidos').innerText = `${pedidos.length} pedidos`;
+            let pedidosFiltrados = pedidos.filter(p => {
+                if (tabActual === 'pendientes') return p.estado === 'pendiente';
+                if (tabActual === 'aceptados') return p.estado === 'aceptado';
+                if (tabActual === 'rechazados') return p.estado === 'rechazado';
+            });
 
-            if (pedidos.length === 0) {
-                contenedor.innerHTML = `<p style="text-align: center; padding: 20px; color: var(--text-muted);">No hay pedidos registrados todavía.</p>`;
+            if (pedidosFiltrados.length === 0) {
+                contenedor.innerHTML = `<p style="text-align: center; padding: 30px; color: var(--text-muted);">No hay pedidos en esta sección.</p>`;
                 return;
             }
 
-            pedidos.reverse().forEach(p => {
+            pedidosFiltrados.reverse().forEach(p => {
                 let itemsStr = p.productos.map(i => `• ${i.cantidad}x ${i.name}`).join("<br>");
                 let div = document.createElement('div');
                 div.className = 'pedido-card';
+                
+                let botonesAccion = '';
+                if (p.estado === 'pendiente') {
+                    botonesAccion = `
+                        <div class="action-buttons">
+                            <button class="btn-aceptar" onclick="actualizarEstado(${p.id}, 'aceptado')">Aceptar Pedido ✅</button>
+                            <button class="btn-rechazar" onclick="actualizarEstado(${p.id}, 'rechazado')">Rechazar Pedido ❌</button>
+                        </div>
+                    `;
+                } else if (p.estado === 'aceptado') {
+                    botonesAccion = `<span class="badge-status badge-aceptado">Pedido Aceptado</span>`;
+                } else {
+                    botonesAccion = `<span class="badge-status badge-rechazado">Pedido Rechazado</span>`;
+                }
+
                 div.innerHTML = `
                     <div class="pedido-header">
                         <span class="cliente-name">👤 ${p.cliente}</span>
                         <span class="pedido-time">🕒 ${p.fecha}</span>
                     </div>
                     <div class="pedido-items">${itemsStr}</div>
-                    <div class="pedido-total">Total a cobrar: $${p.total}.00 MXN</div>
+                    <div class="pedido-total">Total: $${p.total}.00 MXN</div>
+                    ${botonesAccion}
                 `;
                 contenedor.appendChild(div);
             });
         }
 
-        function limpiarPedidos() {
-            if (confirm("¿Estás seguro de borrar todos los pedidos registrados?")) {
-                localStorage.removeItem('snackhouse_pedidos_admin');
-                cargarPedidos();
-            }
+        function actualizarEstado(idPedido, nuevoEstado) {
+            let pedidos = JSON.parse(localStorage.getItem('snackhouse_pedidos_admin')) || [];
+            pedidos = pedidos.map(p => {
+                if (p.id === idPedido) {
+                    p.estado = nuevoEstado;
+                }
+                return p;
+            });
+            localStorage.setItem('snackhouse_pedidos_admin', JSON.stringify(pedidos));
+            cargarPedidos();
         }
     </script>
 </body>
