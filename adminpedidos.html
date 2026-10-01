@@ -204,12 +204,12 @@
         </div>
 
         <br>
-        <a href="index.html" class="back-link">&larr; Volver a la Tienda</a>
+        <a href="index.html" class="link">&larr; Volver a la Tienda</a>
     </div>
 
     <script>
-        // CONTRASEÑA FIJA (Puedes cambiarla aquí mismo si quieres)
-        const PASSWORD_SECRETA = "snackhouse2026";
+        // NUEVA CONTRASEÑA CONFIGURADA
+        const PASSWORD_SECRETA = "261215";
         let tabActual = 'pendientes';
 
         function verificarPassword() {
@@ -233,7 +233,10 @@
         }
 
         function cargarPedidos() {
-            let pedidos = JSON.parse(localStorage.getItem('snackhouse_pedidos_admin')) || [];
+            let pedidosCrudos = localStorage.getItem('snackhouse_pedidos_admin');
+            console.log("Datos leídos de localStorage:", pedidosCrudos); // Para depurar en F12
+
+            let pedidos = JSON.parse(pedidosCrudos) || [];
             let contenedor = document.getElementById('lista-pedidos');
             contenedor.innerHTML = "";
 
