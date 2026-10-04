@@ -121,7 +121,7 @@
 
         <div class="form-group">
             <label>Zona de Entrega (Punto Operativo):</label>
-            <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&auto=format&fit=crop&q=80" alt="Zona de Entrega" class="zone-img">
+            <img src="zonadeentregas.png" alt="Zona de Entrega" class="zone-img">
             <span style="font-size: 11px; color: var(--text-muted);">Área designada: Canchas / Bancas principales del patio central.</span>
         </div>
 
@@ -170,7 +170,7 @@
                 cliente: nombre,
                 productos: carrito,
                 total: total,
-                estado: 'pendiente', // pendiente, aceptado, rechazado
+                estado: 'pendiente',
                 fecha: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
 
@@ -178,7 +178,6 @@
             listaPedidos.push(nuevoPedido);
             localStorage.setItem('snackhouse_pedidos_admin', JSON.stringify(listaPedidos));
 
-            // Limpiar carrito
             localStorage.removeItem('snackhouse_carrito');
 
             alert("¡Pedido enviado con éxito! Recoge tus snacks en la zona indicada llevando tu dinero.");
