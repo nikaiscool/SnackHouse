@@ -24,8 +24,8 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            padding: 40px 20px;
             animation: fadeIn 0.3s ease-out;
+            padding: 40px 20px;
         }
 
         @keyframes fadeIn {
@@ -125,7 +125,7 @@
         </div>
 
         <div class="grid" id="product-grid">
-            <!-- Se llena con JS -->
+            <!-- Dinámico -->
         </div>
     </div>
 
@@ -135,7 +135,7 @@
             { id: 2, name: "Takis Fuego", price: 22, emoji: "🔥", desc: "Rollo de maíz crujiente con intenso sabor a chile y limón.", disponible: true },
             { id: 3, name: "Pulparindo", price: 8, emoji: "🍬", desc: "Dulce de pulpa de tamarindo natural con sal y chile.", disponible: true },
             { id: 4, name: "Gomitas de Sandía", price: 12, emoji: "🍉", desc: "Gomitas azucaradas con forma y sabor a sandía acidita.", disponible: true },
-            { id: 5, name: "Chicles Trident (Menta)", price: 15, emoji: "🍃", desc: "Chicles sin azúcar sabor menta refrescante para el aliento.", disponible: false }, // Agotado
+            { id: 5, name: "Chicles Trident (Menta)", price: 15, emoji: "🍃", desc: "Chicles sin azúcar sabor menta refrescante para el aliento.", disponible: false },
             { id: 6, name: "Cacahuate Japonés", price: 22, emoji: "🥜", desc: "Cacahuates crujientes con capa dorada de harina y soya.", disponible: true },
             { id: 7, name: "Cacahuates Picantes", price: 22, emoji: "🌶️", desc: "Cacahuates tostados con una capa crujiente y picante.", disponible: true },
             { id: 8, name: "Cacahuates Salados", price: 22, emoji: "🧂", desc: "Cacahuates clásicos tostados y con su punto exacto de sal.", disponible: true },
@@ -156,7 +156,7 @@
             card.innerHTML = `
                 <div style="${!p.disponible ? 'opacity: 0.5;' : ''}">
                     <div class="product-img">${p.emoji}</div>
-                    <div class="product-name">${p.name} ${!p.disponible ? '<span style="font-size:11px; color:#ef4444;">(Agotado)</span>' : ''}</div>
+                    <div class="product-name">${p.name} ${!p.disponible ? '<span style="font-size:11px; color:#ef4444; font-weight:normal;">(Agotado)</span>' : ''}</div>
                     <div class="product-price">$${p.price}.00 MXN</div>
                 </div>
                 ${botonHTML}
@@ -165,7 +165,7 @@
         });
 
         function agregarAlCarrito(id, event) {
-            event.preventDefault(); // Evita que abra la página de detalles al hacer clic rápido en el botón
+            event.preventDefault();
             let productoSeleccionado = productos.find(p => p.id === id);
             if (!productoSeleccionado.disponible) return;
 
