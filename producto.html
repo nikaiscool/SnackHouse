@@ -90,16 +90,16 @@
     <script>
         // Mismo catálogo sincronizado
         const productos = [
-            { id: 1, name: "Doritos", price: 20, emoji: "🔺", desc: "Los clásicos totopos crujientes con su toque de queso y chile." },
-            { id: 2, name: "Takis Fuego", price: 22, emoji: "🔥", desc: "Rollo de maíz crujiente con intenso sabor a chile y limón." },
-            { id: 3, name: "Pulparindo", price: 8, emoji: "🍬", desc: "Dulce de pulpa de tamarindo natural con sal y chile." },
-            { id: 4, name: "Gomitas de Sandía", price: 12, emoji: "🍉", desc: "Gomitas azucaradas con forma y sabor a sandía acidita." },
-            { id: 5, name: "Chicles Trident (Menta)", price: 15, emoji: "🍃", desc: "Chicles sin azúcar sabor menta refrescante para el aliento." },
-            { id: 6, name: "Cacahuate Japonés", price: 14, emoji: "🥜", desc: "Cacahuates crujientes con capa dorada de harina y soya." },
-            { id: 7, name: "Cacahuates Picantes", price: 14, emoji: "🌶️", desc: "Cacahuates tostados con una capa crujiente y picante." },
-            { id: 8, name: "Cacahuates Salados", price: 14, emoji: "🧂", desc: "Cacahuates clásicos tostados y con su punto exacto de sal." },
-            { id: 9, name: "Takis Azules", price: 22, emoji: "🌀", desc: "La versión extrema de Takis con un toque picante y llamativo color." },
-            { id: 10, name: "Chips Fuego", price: 20, emoji: "🥔", desc: "Papas crujientes artesanales con chile y limón bien potente." }
+            { id: 1, name: "Doritos", price: 20, emoji: "🔺", desc: "Los clásicos totopos crujientes con su toque de queso y chile.", disponible: true },
+            { id: 2, name: "Takis Fuego", price: 22, emoji: "🔥", desc: "Rollo de maíz crujiente con intenso sabor a chile y limón.", disponible: true },
+            { id: 3, name: "Pulparindo", price: 8, emoji: "🍬", desc: "Dulce de pulpa de tamarindo natural con sal y chile.", disponible: true },
+            { id: 4, name: "Gomitas de Sandía", price: 12, emoji: "🍉", desc: "Gomitas azucaradas con forma y sabor a sandía acidita.", disponible: true },
+            { id: 5, name: "Chicles Trident (Menta)", price: 15, emoji: "🍃", desc: "Chicles sin azúcar sabor menta refrescante para el aliento.", disponible: false },
+            { id: 6, name: "Cacahuate Japonés", price: 22, emoji: "🥜", desc: "Cacahuates crujientes con capa dorada de harina y soya.", disponible: true },
+            { id: 7, name: "Cacahuates Picantes", price: 22, emoji: "🌶️", desc: "Cacahuates tostados con una capa crujiente y picante.", disponible: true },
+            { id: 8, name: "Cacahuates Salados", price: 22, emoji: "🧂", desc: "Cacahuates clásicos tostados y con su punto exacto de sal.", disponible: true },
+            { id: 9, name: "Takis Azules", price: 22, emoji: "🌀", desc: "La versión extrema de Takis con un toque picante y llamativo color.", disponible: true },
+            { id: 10, name: "Chips Fuego", price: 20, emoji: "🥔", desc: "Papas crujientes artesanales con chile y limón bien potente.", disponible: true }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -109,12 +109,18 @@
         let container = document.getElementById('product-container');
 
         if (producto) {
+            let botonHTML = producto.disponible 
+                ? `<button class="btn-add" onclick="agregarAlCarrito(${producto.id})">Agregar al Carrito 🛒</button>`
+                : `<button class="btn-add" style="background-color: #27272a; color: #71717a; cursor: not-allowed;" disabled>Agotado</button>`;
+
             container.innerHTML = `
-                <div class="product-img-large">${producto.emoji}</div>
-                <h1>${producto.name}</h1>
-                <div class="product-price">$${producto.price}.00 MXN</div>
-                <div class="product-desc">${producto.desc}</div>
-                <button class="btn-add" onclick="agregarAlCarrito(${producto.id})">Agregar al Carrito 🛒</button>
+                <div style="${!producto.disponible ? 'opacity: 0.5;' : ''}">
+                    <div class="product-img-large">${producto.emoji}</div>
+                    <h1>${producto.name}</h1>
+                    <div class="product-price">$${producto.price}.00 MXN</div>
+                    <div class="product-desc">${producto.desc}</div>
+                </div>
+                ${botonHTML}
                 <br>
                 <a href="index.html" class="back-link">&larr; Volver al Catálogo</a>
             `;
@@ -128,6 +134,8 @@
 
         function agregarAlCarrito(id) {
             let productoSeleccionado = productos.find(p => p.id === id);
+            if (!productoSeleccionado.disponible) return;
+
             let carrito = JSON.parse(localStorage.getItem('snackhouse_carrito')) || [];
 
             let index = carrito.findIndex(p => p.id === id);
