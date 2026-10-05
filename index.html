@@ -171,16 +171,16 @@
 
     <script>
         const productos = [
-            { id: 1, name: "Doritos", price: 20, image: "img/doritos.png", desc: "Los clásicos totopos crujientes con su toque de queso y chile.", disponible: true },
-            { id: 2, name: "Takis Fuego", price: 22, image: "img/takis.png", desc: "Rollo de maíz crujiente con intenso sabor a chile y limón.", disponible: true },
-            { id: 3, name: "Pulparindo", price: 8, image: "img/pulparindo.png", desc: "Dulce de pulpa de tamarindo natural con sal y chile.", disponible: true },
-            { id: 4, name: "Gomitas de Sandía", price: 12, image: "img/sandita.png", desc: "Gomitas azucaradas con forma y sabor a sandía acidita.", disponible: true },
-            { id: 5, name: "Chicles Trident (Menta)", price: 15, image: "img/chicles.png", desc: "Chicles sin azúcar sabor menta refrescante para el aliento.", disponible: false },
+            { id: 1, name: "Doritos", price: 20, image: "doritos.png", desc: "Los clásicos totopos crujientes con su toque de queso y chile.", disponible: true },
+            { id: 2, name: "Takis Fuego", price: 22, image: "takis.png", desc: "Rollo de maíz crujiente con intenso sabor a chile y limón.", disponible: true },
+            { id: 3, name: "Pulparindo", price: 8, image: "pulparindo.png", desc: "Dulce de pulpa de tamarindo natural con sal y chile.", disponible: true },
+            { id: 4, name: "Gomitas de Sandía", price: 12, image: "sandita.png", desc: "Gomitas azucaradas con forma y sabor a sandía acidita.", disponible: true },
+            { id: 5, name: "Chicles Trident (Menta)", price: 15, image: "chicles.png", desc: "Chicles sin azúcar sabor menta refrescante para el aliento.", disponible: false },
             { id: 6, name: "Cacahuate Japonés", price: 22, emoji: "🥜", desc: "Cacahuates crujientes con capa dorada de harina y soya.", disponible: true },
             { id: 7, name: "Cacahuates Picantes", price: 22, emoji: "🌶️", desc: "Cacahuates tostados con una capa crujiente y picante.", disponible: true },
             { id: 8, name: "Cacahuates Salados", price: 22, emoji: "🧂", desc: "Cacahuates clásicos tostados y con su punto exacto de sal.", disponible: true },
-            { id: 9, name: "Takis Azules", price: 22, image: "img/takisazules.png", desc: "La versión extrema de Takis con un toque picante y llamativo color.", disponible: true },
-            { id: 10, name: "Chips Fuego", price: 20, image: "img/chipsfuego.png", desc: "Papas crujientes artesanales con chile y limón bien potente.", disponible: true }
+            { id: 9, name: "Takis Azules", price: 22, image: "takisazules.png", desc: "La versión extrema de Takis con un toque picante y llamativo color.", disponible: true },
+            { id: 10, name: "Chips Fuego", price: 20, image: "chipsfuego.png", desc: "Papas crujientes artesanales con chile y limón bien potente.", disponible: true }
         ];
 
         function actualizarContador() {
@@ -228,7 +228,6 @@
                 ? `<button class="btn-add" onclick="agregarAlCarrito(${p.id}, event)">Agregar al Carrito 🛒</button>`
                 : `<button class="btn-add" style="background-color: #27272a; color: #71717a; cursor: not-allowed;" disabled>Agotado</button>`;
 
-            // Renderizado inteligente: muestra etiqueta <img> si tiene imagen, o el emoji si no
             let contenidoVisual = p.image 
                 ? `<div class="product-img" style="background: transparent; overflow: hidden;"><img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: contain;"></div>`
                 : `<div class="product-img">${p.emoji}</div>`;
