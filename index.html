@@ -151,12 +151,12 @@
             
             let botonHTML = p.disponible 
                 ? `<button class="btn-add" onclick="agregarAlCarrito(${p.id}, event)">Agregar al Carrito 🛒</button>`
-                : `<button class="btn-add" style="background-color: #3f3f46; color: #a1a1aa; cursor: not-allowed;" disabled>Agotado ❌</button>`;
+                : `<button class="btn-add" style="background-color: #27272a; color: #71717a; cursor: not-allowed;" disabled>Agotado</button>`;
 
             card.innerHTML = `
-                <div style="${!p.disponible ? 'opacity: 0.5;' : ''}">
+                <div>
                     <div class="product-img">${p.emoji}</div>
-                    <div class="product-name">${p.name} ${!p.disponible ? '<span style="font-size:11px; color:#ef4444; font-weight:normal;">(Agotado)</span>' : ''}</div>
+                    <div class="product-name">${p.name}</div>
                     <div class="product-price">$${p.price}.00 MXN</div>
                 </div>
                 ${botonHTML}
